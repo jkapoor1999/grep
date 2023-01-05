@@ -131,20 +131,3 @@ type File struct {
 	name  string
 	lines []string
 }
-
-// if line == pattern{
-// 	filenames[file.name] = true
-// 	if flags["-n"]{					
-// 		if len(files) > 1 {
-// 			res = append(res, file.name + ":" + fmt.Sprint(ind + 1) + ":" + line)
-// 		} else {
-// 			res = append(res, fmt.Sprint(ind + 1) + ":" + line)
-// 		}
-// 	} else{
-// 		if len(files) > 1 {
-// 			res = append(res, file.name + ":" + line)
-// 		} else {
-// 			res = append(res, line)
-// 		}
-// 	}
-// }
