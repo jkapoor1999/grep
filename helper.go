@@ -23,6 +23,9 @@ func Search(pattern string, fl []string, fi []string) []string {
 			ans, line2 := hit(pattern, line, file.name, ind, len(files), flags)
 			if ans {
 				filenames[file.name] = true
+				if flags["-l"] == 1 {
+					break
+				}				
 				res = append(res, line2)
 			}			
 		}
