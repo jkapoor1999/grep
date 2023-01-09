@@ -20,7 +20,7 @@ func Search(pattern string, fl []string, fi []string) []string {
 	
 	for _, file := range files{
 		for ind, line := range file.lines{
-			ans, line2 := hit(pattern, line, ind, flags, len(files), file.name)
+			ans, line2 := hit(pattern, line, file.name, ind, len(files), flags)
 			if ans {
 				filenames[file.name] = true
 				res = append(res, line2)
@@ -39,60 +39,58 @@ func Search(pattern string, fl []string, fi []string) []string {
 	return res
 }
 
-func hit (pattern string, line string, ind int, flags map[string]int, filesSize int, fileName string) (bool, string) {
+func hit (pattern, line, fileName string, ind, filesSize int, flags map[string]int) (bool, string) {
 	var sum int = flags["-i"] + flags["-v"] + flags["-x"]
 	var line2 string
 
-	if filesSize > 1 {
+	if (filesSize > 1) {
 		line2 = fileName + ":"
 	}
 
-	if flags["-n"] == 1 {
+	if (flags["-n"] == 1) {
 		line2 += fmt.Sprint(ind + 1) + ":"
 	}
 
-	if sum == 0 {
+	switch (sum) {
+	case 0:
 		if strings.Contains(line, pattern) {			
 			return true, line2 + line
 		}
-	} else if sum == 1 {
-		if flags["-i"] == 1 {
+	case 1:
+		if (flags["-i"] == 1) {
 			if strings.Contains(strings.ToLower(line), strings.ToLower(pattern)) {				
 				return true, line2 + line
 			}
-		} else if flags["-v"] == 1 {
+		} else if (flags["-v"] == 1) {
 			if !strings.Contains(line, pattern) {				
 				return true, line2 + line
 			}
-		} else if flags["-x"] == 1 {
+		} else if (flags["-x"] == 1) {
 			if line == pattern {				
 				return true, line2 + line
 			}
 		}
-	} else if sum == 2 {
-
-		if flags["-i"] == 1 && flags["-v"] == 1 {
+	case 2:
+		if (flags["-i"] == 1 && flags["-v"] == 1) {
 			if !strings.Contains(strings.ToLower(line), strings.ToLower(pattern)) {
 				return true, line2 + line
 			}
-		} else if flags["-i"] == 1 && flags["-x"] == 1 {
+		} else if (flags["-i"] == 1 && flags["-x"] == 1) {
 			if strings.EqualFold(line, pattern) {
 				return true, line2 + line
 			}
 		} else {
-			if line != pattern {
+			if (line != pattern) {
 				return true, line2 + line
 			}
 		}
-	} else {
+	case 3:
 		if !strings.EqualFold(line, pattern){
 			return true, line2 + line
 		}
-	}
-	
+	}		
 	return false, ""
 }
-
 
 func createFiles(filenames []string) []File {
 	lst := []File{}
@@ -113,7 +111,6 @@ func createFiles(filenames []string) []File {
 	}
 	return lst
 }
-
 
 func StringSlicesEqual(a, b []string) bool {
     if len(a) != len(b) {
